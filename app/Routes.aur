@@ -1,0 +1,8 @@
+Route GET /home {
+    Response: "Hello, welcome to our homepage!";
+}
+
+Route POST /submit-form {
+    ProcessForm: "contactForm";
+    ResponseFile: "/responses/submitSuccess.html";
+}

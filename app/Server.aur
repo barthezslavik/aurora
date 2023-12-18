@@ -1,0 +1,5 @@
+Server MyWebServer {
+    Host: "localhost";
+    Port: 8080;
+    StaticFiles: "/public";
+}
