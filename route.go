@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -13,6 +14,11 @@ type RouteConfig struct {
 	Response string
 }
 
+type DSLLine struct {
+	Directive string
+	Arguments []string
+}
+
 func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -21,46 +27,71 @@ func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 	defer file.Close()
 
 	var routes []RouteConfig
-	scanner := bufio.NewScanner(file)
 	var currentRoute *RouteConfig
 
+	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
 
-		if strings.HasPrefix(line, "Route") {
-			var err error
-			currentRoute, err = parseRoute(line)
+		dslLine, err := parseDSLLine(line)
+		if err != nil {
+			fmt.Println("Warning: skipping line due to parse error:", err)
+			continue
+		}
+
+		switch dslLine.Directive {
+		case "Route":
+			currentRoute, err = interpretRoute(dslLine)
 			if err != nil {
-				return nil, err
+				fmt.Println("Warning: skipping route due to interpretation error:", err)
+				continue
 			}
-		} else if currentRoute != nil && strings.HasPrefix(line, "Response:") {
-			response := extractResponse(line)
-			currentRoute.Response = response
-			routes = append(routes, *currentRoute)
-			currentRoute = nil // Reset for the next route
+		case "Response:":
+			if currentRoute != nil {
+				currentRoute.Response = interpretResponse(dslLine)
+				routes = append(routes, *currentRoute)
+				currentRoute = nil
+			}
 		}
 	}
 
 	return routes, scanner.Err()
 }
 
-func parseRoute(line string) (*RouteConfig, error) {
+func parseDSLLine(line string) (DSLLine, error) {
 	parts := strings.Fields(line)
-	if len(parts) < 3 {
-		return nil, errors.New("invalid Route format")
+	if len(parts) == 0 {
+		return DSLLine{}, errors.New("empty line")
 	}
 
-	method := strings.ToUpper(parts[1])
-	path := parts[2]
+	directive := parts[0]
+	arguments := parts[1:]
+
+	return DSLLine{Directive: directive, Arguments: arguments}, nil
+}
+
+func interpretRoute(dslLine DSLLine) (*RouteConfig, error) {
+	if len(dslLine.Arguments) < 2 {
+		return nil, errors.New("insufficient arguments for Route")
+	}
+
+	method := strings.ToUpper(dslLine.Arguments[0])
+	path := dslLine.Arguments[1]
 
 	return &RouteConfig{Method: method, Path: path}, nil
 }
 
-func extractResponse(line string) string {
-	// Extracts the response part from the line
-	parts := strings.SplitN(line, "\"", 3)
-	if len(parts) >= 2 {
-		return parts[1] // The response text is the second part
+func interpretResponse(dslLine DSLLine) string {
+	if len(dslLine.Arguments) > 0 {
+		// Join the arguments to form the response string
+		response := strings.Join(dslLine.Arguments, " ")
+
+		// Remove surrounding quotes and trailing semicolon
+		response = strings.Trim(response, "\";")
+		return response
 	}
 	return ""
 }
