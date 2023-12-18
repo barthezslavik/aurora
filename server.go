@@ -32,7 +32,7 @@ func parseDSLConfig(filePath string) (ServerConfig, error) {
 
 		key, value, err := parseKeyValue(line)
 		if err != nil {
-			return ServerConfig{}, err
+			return ServerConfig{}, fmt.Errorf("invalid configuration line: %w", err)
 		}
 
 		switch key {
@@ -50,16 +50,4 @@ func parseDSLConfig(filePath string) (ServerConfig, error) {
 	}
 
 	return config, scanner.Err()
-}
-
-func parseKeyValue(line string) (string, string, error) {
-	parts := strings.SplitN(line, ":", 2)
-	if len(parts) != 2 {
-		return "", "", fmt.Errorf("invalid format: %s", line)
-	}
-
-	key := strings.TrimSpace(parts[0])
-	value := strings.Trim(parts[1], " \";")
-
-	return key, value, nil
 }

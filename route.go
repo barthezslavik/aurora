@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -14,11 +13,6 @@ type RouteConfig struct {
 	Response string
 }
 
-type DSLLine struct {
-	Directive string
-	Arguments []string
-}
-
 func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -27,9 +21,9 @@ func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 	defer file.Close()
 
 	var routes []RouteConfig
-	var currentRoute *RouteConfig
-
 	scanner := bufio.NewScanner(file)
+
+	var currentRoute *RouteConfig
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" {
@@ -61,21 +55,9 @@ func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 	return routes, scanner.Err()
 }
 
-func parseDSLLine(line string) (DSLLine, error) {
-	parts := strings.Fields(line)
-	if len(parts) == 0 {
-		return DSLLine{}, errors.New("empty line")
-	}
-
-	directive := parts[0]
-	arguments := parts[1:]
-
-	return DSLLine{Directive: directive, Arguments: arguments}, nil
-}
-
 func interpretRoute(dslLine DSLLine) (*RouteConfig, error) {
 	if len(dslLine.Arguments) < 2 {
-		return nil, errors.New("insufficient arguments for Route")
+		return nil, fmt.Errorf("insufficient arguments for Route")
 	}
 
 	method := strings.ToUpper(dslLine.Arguments[0])
@@ -86,10 +68,8 @@ func interpretRoute(dslLine DSLLine) (*RouteConfig, error) {
 
 func interpretResponse(dslLine DSLLine) string {
 	if len(dslLine.Arguments) > 0 {
-		// Join the arguments to form the response string
+		// Removes quotes and semicolon
 		response := strings.Join(dslLine.Arguments, " ")
-
-		// Remove surrounding quotes and trailing semicolon
 		response = strings.Trim(response, "\";")
 		return response
 	}
