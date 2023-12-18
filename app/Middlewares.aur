@@ -1,0 +1,8 @@
+Middleware logRequest {
+    Action: "LogRequest";
+}
+
+Middleware authenticate {
+    Action: "Authenticate";
+    Key: "secret-key";
+}
