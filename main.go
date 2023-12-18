@@ -2,45 +2,76 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
 func main() {
+	// Initialize server configuration
+	serverConfig, err := initServerConfig()
+	if err != nil {
+		log.Fatalf("Failed to initialize server: %v\n", err)
+	}
+
+	// Initialize routes
+	err = initRoutes()
+	if err != nil {
+		log.Fatalf("Failed to initialize routes: %v\n", err)
+	}
+
+	// Start the server
+	startServer(serverConfig)
+}
+
+// initServerConfig parses the server configuration from the DSL file
+func initServerConfig() (ServerConfig, error) {
 	serverConfig, err := parseDSLConfig("app/Server.aur")
 	if err != nil {
-		fmt.Println("Error parsing server configuration:", err)
-		return
+		return ServerConfig{}, fmt.Errorf("error parsing server configuration: %w", err)
 	}
+	return serverConfig, nil
+}
 
+// initRoutes parses route and middleware configurations and sets up routes
+func initRoutes() error {
 	routeConfigs, err := parseRouteConfig("app/Routes.aur")
 	if err != nil {
-		fmt.Println("Error parsing route configuration:", err)
-		return
+		return fmt.Errorf("error parsing route configuration: %w", err)
 	}
 
-	// Parse middleware configurations from the DSL file
 	middlewareConfigs, err := parseMiddlewareConfig("app/Middlewares.aur")
 	if err != nil {
-		fmt.Println("Error parsing middleware configuration:", err)
-		return
+		return fmt.Errorf("error parsing middleware configuration: %w", err)
 	}
 
 	for _, route := range routeConfigs {
-		handler := func(w http.ResponseWriter, r *http.Request) {
-			// This is a simplified handler. You might want to add more complex handling here.
-			fmt.Fprint(w, route.Response)
-		}
-
-		// Wrap the handler with middleware
-		handler = applyMiddleware(handler, middlewareConfigs)
-
-		fmt.Printf("Adding route %s %s\n", route.Method, route.Path)
-		http.HandleFunc(route.Path, handler)
+		setupRoute(route, middlewareConfigs)
 	}
 
-	fmt.Printf("Starting server at http://%s:%d\n", serverConfig.Host, serverConfig.Port)
-	err = http.ListenAndServe(fmt.Sprintf("%s:%d", serverConfig.Host, serverConfig.Port), nil)
-	if err != nil {
-		fmt.Println("Error starting server:", err)
+	return nil
+}
+
+// setupRoute sets up a single route with middleware
+func setupRoute(route RouteConfig, middlewareConfigs []MiddlewareConfig) {
+	handler := createHandler(route)
+	handler = applyMiddleware(handler, middlewareConfigs)
+
+	log.Printf("Adding route %s %s\n", route.Method, route.Path)
+	http.HandleFunc(route.Path, handler)
+}
+
+// createHandler creates a basic HTTP handler for a route
+func createHandler(route RouteConfig) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, route.Response)
+	}
+}
+
+// startServer starts the HTTP server with the provided configuration
+func startServer(config ServerConfig) {
+	address := fmt.Sprintf("%s:%d", config.Host, config.Port)
+	log.Printf("Starting server at http://%s\n", address)
+	if err := http.ListenAndServe(address, nil); err != nil {
+		log.Fatalf("Failed to start server: %v\n", err)
 	}
 }
