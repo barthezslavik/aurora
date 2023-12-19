@@ -3,7 +3,7 @@ UserProfileController:
 
     UpdateAge(userId: Integer, newAge: Integer) -> 
         if ValidateAge(newAge) then UpdateUserAge(userId, newAge)
-        else "Invalid age"
+        else { error: "Invalid age" }
 
     GetUser(userId: Integer) -> User.find(userId) or "Not found"
 
@@ -15,7 +15,7 @@ UserProfileController:
 
     UpdateUserAge(userId: Integer, age: Integer) ->
         User.find(userId).age = age
-        "Updated"
+        { status: "Age updated" }
 
     CalculateAverageLength(posts: Post[]) ->
         if Count(posts) == 0 then 0
