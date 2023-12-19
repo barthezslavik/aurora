@@ -8,13 +8,13 @@ UserProfileController:
 GetUser(userId: Integer) -> User.find(userId) or "Not found"
 
 GetPostStats(userId: Integer) -> 
-    posts := Post.findAllByUserId(userId)
+    posts = Post.findAllByUserId(userId)
     { Count(posts), CalculateAverageLength(posts) }
 
 ValidateAge(age: Integer) -> age >= 0 and age <= 150
 
 UpdateUserAge(userId: Integer, age: Integer) ->
-    User.find(userId).age := age
+    User.find(userId).age = age
     "Updated"
 
 CalculateAverageLength(posts: Post[]) ->
