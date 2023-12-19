@@ -10,31 +10,31 @@ Controller: UserProfileController {
         UpdateUserAge(userId, newAge);
         "Age updated successfully";
     };
+
+    GetUser: (userId: Integer) => User.find(userId) or "User not found";
+
+    GetPostStats: (userId: Integer) => {
+        posts: Post.findAllByUserId(userId);
+        count: Count(posts);
+        averageLength: CalculateAverageLength(posts);
+        Return { postCount: count, avgLength: averageLength };
+    };
+
+    ValidateAge: (age: Integer) => {
+        If age < 0 Or age > 150 Then Throw "Invalid age";
+    };
+
+    UpdateUserAge: (userId: Integer, age: Integer) => {
+        user: User.find(userId);
+        user.age = age;
+        user.save();
+    };
+
+    CalculateAverageLength: (posts: Post[]) => {
+        totalLength: SumLengths(posts);
+        count: Count(posts);
+        If count is 0 Then Return 0;
+        average: totalLength / count;
+        Return average;
+    };
 }
-
-GetUser: (userId: Integer) => User.find(userId) or "User not found";
-
-GetPostStats: (userId: Integer) => {
-    posts: Post.findAllByUserId(userId);
-    count: Count(posts);
-    averageLength: CalculateAverageLength(posts);
-    Return { postCount: count, avgLength: averageLength };
-};
-
-ValidateAge: (age: Integer) => {
-    If age < 0 Or age > 150 Then Throw "Invalid age";
-};
-
-UpdateUserAge: (userId: Integer, age: Integer) => {
-    user: User.find(userId);
-    user.age = age;
-    user.save();
-};
-
-CalculateAverageLength: (posts: Post[]) => {
-    totalLength: SumLengths(posts);
-    count: Count(posts);
-    If count is 0 Then Return 0;
-    average: totalLength / count;
-    Return average;
-};
