@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"bufio"
@@ -16,7 +16,7 @@ type MiddlewareConfig struct {
 }
 
 // parseMiddlewareConfig parses the middleware configuration from a DSL file
-func parseMiddlewareConfig(filePath string) ([]MiddlewareConfig, error) {
+func ParseMiddlewareConfig(filePath string) ([]MiddlewareConfig, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -71,20 +71,20 @@ func parseMiddlewareConfig(filePath string) ([]MiddlewareConfig, error) {
 }
 
 // applyMiddleware wraps an HTTP handler with the specified middlewares
-func applyMiddleware(handler http.HandlerFunc, middlewares []MiddlewareConfig) http.HandlerFunc {
+func ApplyMiddleware(handler http.HandlerFunc, middlewares []MiddlewareConfig) http.HandlerFunc {
 	for _, mw := range middlewares {
 		switch mw.Action {
 		case "LogRequest":
-			handler = logRequestMiddleware(handler)
+			handler = LogRequestMiddleware(handler)
 		case "Authenticate":
-			handler = authenticateMiddleware(handler, mw.Options["Key"])
+			handler = AuthenticateMiddleware(handler, mw.Options["Key"])
 		}
 	}
 	return handler
 }
 
 // logRequestMiddleware is a middleware that logs each request
-func logRequestMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func LogRequestMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Request received: %s %s\n", r.Method, r.URL.Path)
 		next(w, r)
@@ -92,7 +92,7 @@ func logRequestMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 // authenticateMiddleware is a middleware that handles authentication
-func authenticateMiddleware(next http.HandlerFunc, key string) http.HandlerFunc {
+func AuthenticateMiddleware(next http.HandlerFunc, key string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Authentication logic here...
 		// For example, check some header against the 'key'

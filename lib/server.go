@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"bufio"
@@ -14,7 +14,7 @@ type ServerConfig struct {
 	StaticFiles string
 }
 
-func parseDSLConfig(filePath string) (ServerConfig, error) {
+func ParseDSLConfig(filePath string) (ServerConfig, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return ServerConfig{}, err
@@ -30,7 +30,7 @@ func parseDSLConfig(filePath string) (ServerConfig, error) {
 			continue
 		}
 
-		key, value, err := parseKeyValue(line)
+		key, value, err := ParseKeyValue(line)
 		if err != nil {
 			return ServerConfig{}, fmt.Errorf("invalid configuration line: %w", err)
 		}

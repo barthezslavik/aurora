@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"bufio"
@@ -13,7 +13,7 @@ type RouteConfig struct {
 	Response string
 }
 
-func parseRouteConfig(filePath string) ([]RouteConfig, error) {
+func ParseRouteConfig(filePath string) ([]RouteConfig, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 			continue
 		}
 
-		dslLine, err := parseDSLLine(line)
+		dslLine, err := ParseDSLLine(line)
 		if err != nil {
 			fmt.Println("Warning: skipping line due to parse error:", err)
 			continue
@@ -38,14 +38,14 @@ func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 
 		switch dslLine.Directive {
 		case "Route":
-			currentRoute, err = interpretRoute(dslLine)
+			currentRoute, err = InterpretRoute(dslLine)
 			if err != nil {
 				fmt.Println("Warning: skipping route due to interpretation error:", err)
 				continue
 			}
 		case "Response:":
 			if currentRoute != nil {
-				currentRoute.Response = interpretResponse(dslLine)
+				currentRoute.Response = InterpretResponse(dslLine)
 				routes = append(routes, *currentRoute)
 				currentRoute = nil
 			}
@@ -55,7 +55,7 @@ func parseRouteConfig(filePath string) ([]RouteConfig, error) {
 	return routes, scanner.Err()
 }
 
-func interpretRoute(dslLine DSLLine) (*RouteConfig, error) {
+func InterpretRoute(dslLine DSLLine) (*RouteConfig, error) {
 	if len(dslLine.Arguments) < 2 {
 		return nil, fmt.Errorf("insufficient arguments for Route")
 	}
@@ -66,7 +66,7 @@ func interpretRoute(dslLine DSLLine) (*RouteConfig, error) {
 	return &RouteConfig{Method: method, Path: path}, nil
 }
 
-func interpretResponse(dslLine DSLLine) string {
+func InterpretResponse(dslLine DSLLine) string {
 	if len(dslLine.Arguments) > 0 {
 		// Removes quotes and semicolon
 		response := strings.Join(dslLine.Arguments, " ")

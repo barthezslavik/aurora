@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ type DSLLine struct {
 	Arguments []string
 }
 
-func parseDSLLine(line string) (DSLLine, error) {
+func ParseDSLLine(line string) (DSLLine, error) {
 	parts := strings.Fields(line)
 	if len(parts) == 0 {
 		return DSLLine{}, errors.New("empty line")
@@ -22,7 +22,7 @@ func parseDSLLine(line string) (DSLLine, error) {
 	return DSLLine{Directive: directive, Arguments: arguments}, nil
 }
 
-func parseKeyValue(line string) (string, string, error) {
+func ParseKeyValue(line string) (string, string, error) {
 	parts := strings.SplitN(line, ":", 2)
 	if len(parts) != 2 {
 		return "", "", errors.New("invalid format")
