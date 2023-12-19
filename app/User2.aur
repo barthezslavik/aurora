@@ -1,0 +1,19 @@
+UserModel:
+    Fields() ->
+        Field(id, Integer, [primaryKey, autoIncrement]),
+        Field(name, String, [length: 50]),
+        Field(email, String, [length: 100]),
+        Field(age, Integer)
+
+    Associations() ->
+        HasMany(Posts),
+        BelongsTo(Group)
+
+    Queries() ->
+        AdultUsers() ->
+            Where("age > 18"),
+            Select(["name", "email"])
+
+        FindByName(name: String) ->
+            Where("name = ?", [name]),
+            SelectAll()
