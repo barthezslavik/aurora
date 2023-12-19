@@ -1,0 +1,32 @@
+UserProfileController {
+    GetProfile(userId: Integer) -> { GetUser(userId), GetPostStats(userId) }
+
+    UpdateAge(userId: Integer, newAge: Integer) -> {
+        ValidateAge(newAge);
+        UpdateUserAge(userId, newAge);
+        "Age updated successfully"
+    }
+}
+
+GetUser(userId: Integer) -> User.find(userId) or "User not found"
+
+GetPostStats(userId: Integer) -> {
+    posts := Post.findAllByUserId(userId);
+    postCount := Count(posts),
+    avgLength := CalculateAverageLength(posts)
+    { postCount, avgLength }
+}
+
+ValidateAge(age: Integer) -> if age < 0 or age > 150 then "Invalid age" else "Valid age"
+
+UpdateUserAge(userId: Integer, age: Integer) -> {
+    user := User.find(userId);
+    user.age := age;
+    user.save()
+}
+
+CalculateAverageLength(posts: Post[]) -> {
+    totalLength := SumLengths(posts);
+    count := Count(posts);
+    if count is 0 then 0 else totalLength / count
+}

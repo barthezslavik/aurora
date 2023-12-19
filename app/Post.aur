@@ -1,0 +1,12 @@
+Model Post {
+    Fields {
+        id: Integer, primaryKey, autoIncrement;
+        title: String, length: 100;
+        content: Text;
+        userId: Integer, foreignKey: "users.id";
+    }
+
+    Associations {
+        belongsTo: User;
+    }
+}

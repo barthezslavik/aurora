@@ -1,0 +1,23 @@
+Model User {
+    Fields {
+        id: Integer, primaryKey, autoIncrement;
+        name: String, length: 50;
+        email: String, length: 100;
+        age: Integer;
+    }
+
+    Associations {
+        hasMany: Posts;
+        belongsTo: Group;
+    }
+
+    Queries {
+        adultUsers {
+            where: "age > 18";
+            select: ["name", "email"];
+        }
+        findByName(name) {
+            where: "name = ?", [name];
+        }
+    }
+}
