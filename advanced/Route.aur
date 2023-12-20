@@ -1,0 +1,2 @@
+Route GET "/users/{userId}/profile" -> UserProfileController.GetProfile(userId)
+Route PUT "/users/{userId}/age" -> UserProfileController.UpdateAge(userId, newAge)
