@@ -1,0 +1,52 @@
+# User Routes
+Namespace User {
+  Controller UserProfile {
+    GET "/users/{userId}/profile" -> GetProfile(userId)
+    PUT "/users/{userId}/profile" -> UpdateProfile(userId)
+  }
+
+  Controller UserContacts {
+    GET "/users/{userId}/contacts" -> GetContacts(userId)
+    PUT "/users/{userId}/contacts" -> UpdateContacts(userId)
+  }
+
+  Controller UserOrders {
+    GET "/users/{userId}/orders" -> GetOrders(userId)
+    GET "/users/{userId}/orders/recent" -> GetRecentOrders(userId)
+  }
+}
+
+# Product Routes
+Namespace product {
+  Controller ProductManagement {
+    POST "/products" -> CreateProduct
+    GET "/products/{productId}" -> GetProduct(productId)
+  }
+}
+
+# Post Routes
+Namespace post {
+  Controller PostManagement {
+    GET "/posts/{postId}" -> GetPost(postId)
+    POST "/posts/{postId}/comments" -> CreateComment(postId)
+    GET "/posts/{postId}/comments" -> GetComments(postId)
+  }
+}
+
+# Order Management Routes
+Namespace OrderManagement {
+  Controller OrderStatus {
+    GET "/orders/{orderId}/status" -> GetOrderStatus(orderId)
+    PUT "/orders/{orderId}/status" -> UpdateOrderStatus(orderId)
+  }
+}
+
+# Event Routes
+Namespace event {
+  Controller EventManagement {
+    POST "/events" -> CreateEvent
+    GET "/events/{eventId}" -> GetEvent(eventId)
+    GET "/events/{eventId}/participants" -> GetParticipants(eventId)
+    GET "/events/{eventId}/schedule" -> GetSchedule(eventId)
+  }
+}

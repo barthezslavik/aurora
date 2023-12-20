@@ -1,0 +1,47 @@
+Namespace User {
+  UserProfile {
+    GET "/profile/{userId}" -> GetProfile
+    PUT "/profile/{userId}" -> UpdateProfile
+  }
+
+  UserContacts {
+    GET "/contacts/{userId}" -> GetContacts
+    PUT "/contacts/{userId}" -> UpdateContacts
+  }
+
+  UserOrders {
+    GET "/orders/{userId}" -> GetOrders
+    GET "/orders/recent/{userId}" -> GetRecentOrders
+  }
+}
+
+Namespace Product {
+  ProductManagement {
+    POST "/new" -> CreateProduct
+    GET "/{productId}" -> GetProduct
+  }
+}
+
+Namespace Post {
+  PostManagement {
+    GET "/{postId}" -> GetPost
+    POST "/{postId}/comment" -> CreateComment
+    GET "/{postId}/comments" -> GetComments
+  }
+}
+
+Namespace Order {
+  OrderStatus {
+    GET "/status/{orderId}" -> GetOrderStatus
+    PUT "/status/{orderId}" -> UpdateOrderStatus
+  }
+}
+
+Namespace Event {
+  EventManagement {
+    POST "/new" -> CreateEvent
+    GET "/details/{eventId}" -> GetEvent
+    GET "/participants/{eventId}" -> GetParticipants
+    GET "/schedule/{eventId}" -> GetSchedule
+  }
+}

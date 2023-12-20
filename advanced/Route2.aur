@@ -1,0 +1,49 @@
+# User Namespace
+Namespace "user" {
+  Controller "UserProfile" {
+    Route "GET /users/{userId}/profile" -> "GetProfile(userId)"
+    Route "PUT /users/{userId}/profile" -> "UpdateProfile(userId)"
+    Route "GET /users/{userId}/contacts" -> "GetContacts(userId)"
+    Route "PUT /users/{userId}/contacts" -> "UpdateContacts(userId)"
+  }
+  
+  Controller "UserOrders" {
+    Route "GET /users/{userId}/orders" -> "GetOrders(userId)"
+    Route "GET /users/{userId}/orders/recent" -> "GetRecentOrders(userId)"
+  }
+}
+
+# Product Namespace
+Namespace "product" {
+  Controller "ProductManagement" {
+    Route "POST /products" -> "CreateProduct"
+    Route "GET /products/{productId}" -> "GetProduct(productId)"
+  }
+}
+
+# Post Namespace
+namespace "post" {
+  Controller "PostManagement" {
+    Route "GET /posts/{postId}" -> "GetPost(postId)"
+    Route "POST /posts/{postId}/comments" -> "CreateComment(postId)"
+    Route "GET /posts/{postId}/comments" -> "GetComments(postId)"
+  }
+}
+
+# Order Management Namespace
+Namespace "orderManagement" {
+  Controller "OrderStatus" {
+    Route "GET /orders/{orderId}/status" -> "GetOrderStatus(orderId)"
+    Route "PUT /orders/{orderId}/status" -> "UpdateOrderStatus(orderId)"
+  }
+}
+
+# Event Namespace
+Namespace "event" {
+  Controller "EventManagement" {
+    Route "POST /events" -> "CreateEvent"
+    Route "GET /events/{eventId}" -> "GetEvent(eventId)"
+    Route "GET /events/{eventId}/participants" -> "GetParticipants(eventId)"
+    Route "GET /events/{eventId}/schedule" -> "GetSchedule(eventId)"
+  }
+}
