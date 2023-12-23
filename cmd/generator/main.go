@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -92,4 +93,21 @@ func main() {
 	generator := CodeGenerator{}
 	goCode := generator.Generate(ast)
 	fmt.Println(goCode)
+
+	// Save the generated code to a file
+	fileName := "generated_code.go"
+	file, err := os.Create(fileName)
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(goCode)
+	if err != nil {
+		fmt.Println("Error writing to file:", err)
+		return
+	}
+
+	fmt.Printf("Generated code saved to %s\n", fileName)
 }
