@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 	"text/scanner"
 )
@@ -87,10 +89,23 @@ func Parse(tokens []Token) Node {
 
 // Main function for testing the lexer and parser
 func main() {
-	input := `
-UserProfileController:
-    GetProfile(userId: Integer) -> { GetUser(userId), GetPostStats(userId) }
-    `
+	file, err := os.Open("advanced/Controller7.aur")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	var input string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		input += scanner.Text() + "\n"
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading from file:", err)
+		return
+	}
 
 	tokens := Lex(input)
 	fmt.Println("Tokens:")
