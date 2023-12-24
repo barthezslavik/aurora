@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 )
 
 // Node interface for AST nodes
@@ -74,11 +76,22 @@ func (sa *SemanticAnalyzer) Analyze(node Node) {
 
 // Main function for testing
 func main() {
-	ast := ClassDef{Name: "UserProfileController", Methods: []MethodDef{
-		{Name: "GetProfile", Params: []Param{{Name: "userId", Type: "Integer"}}},
-		// ... other methods
-	}}
+	// Read the JSON file
+	astJson, err := ioutil.ReadFile("ast.json")
+	if err != nil {
+		fmt.Println("Error reading AST file:", err)
+		return
+	}
 
+	// Deserialize the JSON back into an AST
+	var ast ClassDef
+	err = json.Unmarshal(astJson, &ast)
+	if err != nil {
+		fmt.Println("Error deserializing AST:", err)
+		return
+	}
+
+	// Use the AST in the semantic analyzer
 	analyzer := SemanticAnalyzer{}
 	analyzer.Analyze(ast)
 

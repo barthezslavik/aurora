@@ -2,7 +2,9 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"text/scanner"
@@ -115,4 +117,18 @@ func main() {
 
 	ast := Parse(tokens)
 	fmt.Printf("AST:\n%s\n", ast)
+
+	// Serialize the AST to JSON
+	astJson, err := json.Marshal(ast)
+	if err != nil {
+		fmt.Println("Error serializing AST:", err)
+		return
+	}
+
+	// Save the JSON to a file
+	err = ioutil.WriteFile("ast.json", astJson, 0644)
+	if err != nil {
+		fmt.Println("Error writing AST to file:", err)
+		return
+	}
 }
