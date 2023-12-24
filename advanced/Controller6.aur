@@ -1,0 +1,30 @@
+UserProfileController
+    GetProfile(userId: Integer)
+        user = getUser(userId)
+        postStats = getPostStats(userId)
+        { user, postStats }
+
+    UpdateAge(userId: Integer, newAge: Integer)
+        validateAge(newAge) ? updateUserAge(userId, newAge) : error("Invalid age")
+        { status: "Age updated" }
+
+    UpdateUserAge(userId: Integer, age: Integer)
+        user = User.find(userId)
+        user.update(age: age)
+        { status: "Age updated" }
+
+    UetUser(userId: Integer)
+        user = User.find(userId)
+        user ? user : error("Not found")
+
+    UetPostStats(userId: Integer)
+        posts = Post.findAllByUserId(userId)
+        postCount = count(posts)
+        averageLength = calculateAverageLength(posts)
+        { postCount, averageLength }
+
+    ValidateAge(age: Integer)
+        age >= 0 && age <= 150
+
+    CalculateAverageLength(posts: Post[])
+        count(posts) > 0 ? sumLengths(posts) / count(posts) : 0

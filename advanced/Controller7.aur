@@ -1,0 +1,15 @@
+UserProfileController
+    GetProfile(userId: Integer) -> { GetUser(userId), GetPostStats(userId) }
+
+    UpdateAge(userId: Integer, newAge: Integer) -> ValidateAge(newAge) ? 
+        UpdateUserAge(userId, newAge) : Error("Invalid age")
+
+    GetPostStats(userId: Integer) -> {
+        Count(Post.findAllByUserId(userId)), 
+        avgLength(Post.findAllByUserId(userId)) 
+    }
+
+    getUser(userId: Integer) -> User.find(userId) or Error("Not found")
+    validateAge(age: Integer) -> age in range(0, 150)
+    updateUserAge(userId: Integer, age: Integer) -> User.find(userId).update(age: age)
+    avgLength(posts: Post[]) -> posts.empty() ? 0 : SumLengths(posts) / posts.count()
