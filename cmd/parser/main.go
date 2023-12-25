@@ -73,20 +73,66 @@ func (p Param) String() string {
 	return fmt.Sprintf("%s: %s", p.Name, p.Type)
 }
 
-// Parse function to create an AST from tokens (simplified example)
-func Parse(tokens []Token) Node {
-	// Your parsing logic goes here
-	// For now, returning a dummy AST for illustration purposes
-	return ClassDef{
-		Name: "UserProfileController",
-		Methods: []MethodDef{
-			{
-				Name:   "GetProfile",
-				Params: []Param{{Name: "userId", Type: "Integer"}},
-				Body:   []Node{},
-			},
-		},
+// Parse function to create an AST from tokens
+func Parse(tokens []Token) ClassDef {
+	var classDef ClassDef
+	var currentMethod *MethodDef
+	var currentParam *Param
+	var expectMethodName, expectParam, expectParamType, expectBody bool
+
+	for _, token := range tokens {
+		switch {
+		case token.Typ == "Ident" && classDef.Name == "":
+			// Expecting a class name
+			classDef.Name = token.Value
+
+		case token.Typ == "Ident" && expectMethodName:
+			// Expecting a method name
+			currentMethod = &MethodDef{Name: token.Value}
+			expectMethodName = false
+			expectParam = true
+
+		case token.Typ == "Ident" && expectParam:
+			// Expecting a parameter name
+			currentParam = &Param{Name: token.Value}
+			expectParam = false
+			expectParamType = true
+
+		case token.Typ == "Ident" && expectParamType:
+			// Expecting a parameter type
+			currentParam.Type = token.Value
+			currentMethod.Params = append(currentMethod.Params, *currentParam)
+			currentParam = nil
+			expectParamType = false
+			expectParam = true
+
+		case token.Value == "->":
+			// End of method signature, start of method body
+			expectBody = true
+			expectParam = false
+
+		case token.Typ == "STRING" && expectBody:
+			// Dummy handling of method body
+			// In a real scenario, you would parse the body properly
+			currentMethod.Body = append(currentMethod.Body, token.Value)
+
+		case token.Value == "\n":
+			// End of method definition
+			if currentMethod != nil {
+				classDef.Methods = append(classDef.Methods, *currentMethod)
+				currentMethod = nil
+				expectMethodName = true
+				expectBody = false
+			}
+		}
+
+		if token.Value == ":" && classDef.Name != "" {
+			// Start of method definitions
+			expectMethodName = true
+		}
 	}
+
+	return classDef
 }
 
 // Main function for testing the lexer and parser

@@ -1,1 +1,1 @@
-{"Name":"UserProfileController","Methods":[{"Name":"GetProfile","Params":[{"Name":"userId","Type":"Integer"}],"Body":[]}]}
+{"Name":"UserProfileController","Methods":null}

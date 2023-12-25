@@ -13,11 +13,11 @@ UserProfileController
         user.update(age: age)
         { status: "Age updated" }
 
-    UetUser(userId: Integer)
+    GetUser(userId: Integer)
         user = User.find(userId)
         user ? user : error("Not found")
 
-    UetPostStats(userId: Integer)
+    GetPostStats(userId: Integer)
         posts = Post.findAllByUserId(userId)
         postCount = count(posts)
         averageLength = calculateAverageLength(posts)

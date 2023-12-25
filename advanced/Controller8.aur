@@ -1,0 +1,15 @@
+UserProfileController
+    GetProfile(userId: int) -> { GetUser(userId), GetPostStats(userId) }
+
+    UpdateAge(userId: int, newAge: int) -> ValidateAge(newAge) ?
+        UpdateUserAge(userId, newAge) : Error("Invalid age")
+
+    GetPostStats(userId: int) -> {
+        Count(Post.FindAllByUserId(userId)), 
+        AvgLength(Post.FindAllByUserId(userId)) 
+    }
+
+    GetUser(userId: int) -> User.Find(userId) or Error("Not found")
+    ValidateAge(age: int) -> age in Range(0, 150)
+    UpdateUserAge(userId: int, age: int) -> User.Find(userId).Update(age: age)
+    AvgLength(posts: Post[]) -> posts.Empty() ? 0 : SumLengths(posts) / posts.Count()
