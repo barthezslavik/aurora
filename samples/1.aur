@@ -1,2 +1,0 @@
-ValidateAge(age: int) -> age in Range(0, 150)
-Print(ValidateAge(10))
