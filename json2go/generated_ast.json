@@ -1,0 +1,124 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "StructDeclaration",
+            "name": "UserProfileController"
+        },
+        {
+            "type": "StructDeclaration",
+            "name": "User",
+            "fields": [
+                {
+                    "name": "ID",
+                    "type": "int"
+                },
+                {
+                    "name": "Age",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "type": "StructDeclaration",
+            "name": "Post",
+            "fields": [
+                {
+                    "name": "UserID",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "type": "MethodDeclaration",
+            "name": "GetProfile",
+            "receiver": "UserProfileController",
+            "parameters": [
+                {
+                    "name": "userId",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "type": "MethodDeclaration",
+            "name": "UpdateAge",
+            "receiver": "UserProfileController",
+            "parameters": [
+                {
+                    "name": "userId",
+                    "type": "int"
+                },
+                {
+                    "name": "newAge",
+                    "type": "int"
+                }
+            ],
+            "returns": [
+                "error"
+            ]
+        },
+        {
+            "type": "MethodDeclaration",
+            "name": "GetPostStats",
+            "receiver": "UserProfileController",
+            "parameters": [
+                {
+                    "name": "userId",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "type": "MethodDeclaration",
+            "name": "GetUser",
+            "receiver": "UserProfileController",
+            "parameters": [
+                {
+                    "name": "userId",
+                    "type": "int"
+                }
+            ],
+            "returns": [
+                "error"
+            ]
+        },
+        {
+            "type": "MethodDeclaration",
+            "name": "ValidateAge",
+            "receiver": "UserProfileController",
+            "parameters": [
+                {
+                    "name": "age",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "type": "MethodDeclaration",
+            "name": "UpdateUserAge",
+            "receiver": "UserProfileController",
+            "parameters": [
+                {
+                    "name": "userId",
+                    "type": "int"
+                },
+                {
+                    "name": "age",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "type": "MethodDeclaration",
+            "name": "AvgLength",
+            "receiver": "UserProfileController",
+            "parameters": [
+                {
+                    "name": "posts",
+                    "type": "[]Post"
+                }
+            ]
+        }
+    ]
+}

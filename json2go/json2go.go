@@ -27,7 +27,7 @@ type Field struct {
 }
 
 func main() {
-	jsonFile, err := os.Open("json_ast.json")
+	jsonFile, err := os.Open("generated_ast.json")
 	if err != nil {
 		fmt.Println(err)
 		return

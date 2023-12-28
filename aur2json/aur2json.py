@@ -83,5 +83,5 @@ ast_json = parse_dsl(dsl)
 print(json.dumps(ast_json, indent=4))
 
 # Save to file
-with open('ast.json', 'w') as f:
+with open('../json2go/generated_ast.json', 'w') as f:
 	json.dump(ast_json, f, indent=4)

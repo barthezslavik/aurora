@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -40,6 +41,27 @@ Controller.UserProfile ->
 	program := parseDSL(dsl)
 	jsonString, _ := json.MarshalIndent(program, "", "    ")
 	fmt.Println(string(jsonString))
+	// Write to file
+	err := writeToFile("../json2go/generated_ast.json", jsonString)
+	if err != nil {
+		fmt.Println("Error writing to file:", err)
+		return
+	}
+}
+
+func writeToFile(filename string, data []byte) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.Write(data)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func parseDSL(dsl string) Program {
