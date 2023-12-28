@@ -1,4 +1,4 @@
-Controller UserProfile ->
+Controller.UserProfile ->
     BeforeAction -> [AuthenticateUser, AuthorizeUser]
 
     GetProfile userId: int ->

@@ -1,7 +1,7 @@
-Model Post  ->
-    Field("id", Integer, [PrimaryKey, AutoIncrement]),
-    Field("title", String, [Length(100)]),
-    Field("content", Text),
-    Field("userId", Integer, [ForeignKey("users.id")]),
+Model.Post  ->
+    Field("id", int, [PrimaryKey, AutoIncrement]),
+    Field("title", str, [Length(100)]),
+    Field("content", text),
+    Field("userId", int, [ForeignKey("users.id")]),
 
     BelongsTo("User")
