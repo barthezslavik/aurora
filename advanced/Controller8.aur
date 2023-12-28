@@ -1,16 +1,14 @@
-UserProfileController
-    GetProfile(userId: int) -> {
-        GetUser(userId),
-        GetPostStats(userId)
-    }
+Controller UserProfile ->
+    BeforeAction -> [AuthenticateUser, AuthorizeUser]
+
+    GetProfile userId: int ->
+        { user: GetUser(userId), post_stats: GetPostStats(userId) }
+
+    GetPostStats(userId: int) ->
+        { post_count: PostCount(userId), avg_length: AvgLength(userId) }
 
     UpdateAge(userId: int, newAge: int) ->
         ValidateAge(newAge) ? UpdateUserAge(userId, newAge) : Error("Invalid age")
-
-    GetPostStats(userId: int) -> {
-        Count(Post.FindAllByUserId(userId)),
-        AvgLength(Post.FindAllByUserId(userId))
-    }
 
     GetUser(userId: int) -> User.Find(userId) or Error("Not found")
 

@@ -1,5 +1,4 @@
-Server {
-    Host: "localhost";
-    Port: 8080;
-    StaticFiles: "/public";
-}
+Server ->
+    Host: "localhost"
+    Port: 8080
+    StaticFiles: "/public"
