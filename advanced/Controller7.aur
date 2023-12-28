@@ -1,4 +1,4 @@
-UserProfileController
+Controller.UserProfile ->
     GetProfile(userId: Integer) -> { GetUser(userId), GetPostStats(userId) }
 
     UpdateAge(userId: Integer, newAge: Integer) -> ValidateAge(newAge) ? 

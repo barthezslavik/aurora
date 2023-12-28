@@ -1,0 +1,80 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "StructDeclaration",
+      "name": "UserProfileController",
+      "fields": []
+    },
+    {
+      "type": "StructDeclaration",
+      "name": "User",
+      "fields": [
+        {"name": "ID", "type": "int"},
+        {"name": "Age", "type": "int"}
+      ]
+    },
+    {
+      "type": "StructDeclaration",
+      "name": "Post",
+      "fields": [
+        {"name": "UserID", "type": "int"}
+      ]
+    },
+    {
+      "type": "MethodDeclaration",
+      "receiver": "UserProfileController",
+      "name": "GetProfile",
+      "parameters": [{"name": "userId", "type": "int"}],
+      "returns": ["*User", "error"]
+    },
+    {
+      "type": "MethodDeclaration",
+      "receiver": "UserProfileController",
+      "name": "UpdateAge",
+      "parameters": [
+        {"name": "userId", "type": "int"},
+        {"name": "newAge", "type": "int"}
+      ],
+      "returns": ["error"]
+    },
+    {
+      "type": "MethodDeclaration",
+      "receiver": "UserProfileController",
+      "name": "GetPostStats",
+      "parameters": [{"name": "userId", "type": "int"}],
+      "returns": ["PostStats", "error"]
+    },
+    {
+      "type": "MethodDeclaration",
+      "receiver": "UserProfileController",
+      "name": "GetUser",
+      "parameters": [{"name": "userId", "type": "int"}],
+      "returns": ["*User", "error"]
+    },
+    {
+      "type": "MethodDeclaration",
+      "receiver": "UserProfileController",
+      "name": "ValidateAge",
+      "parameters": [{"name": "age", "type": "int"}],
+      "returns": ["bool"]
+    },
+    {
+      "type": "MethodDeclaration",
+      "receiver": "UserProfileController",
+      "name": "UpdateUserAge",
+      "parameters": [
+        {"name": "userId", "type": "int"},
+        {"name": "age", "type": "int"}
+      ],
+      "returns": ["error"]
+    },
+    {
+      "type": "MethodDeclaration",
+      "receiver": "UserProfileController",
+      "name": "AvgLength",
+      "parameters": [{"name": "posts", "type": "[]Post"}],
+      "returns": ["float64"]
+    }
+  ]
+}
