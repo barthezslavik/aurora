@@ -1,0 +1,6 @@
+Print("go" + "lang")
+Print("1+1 =", 1+1)
+Print("7.0/3.0 =", 7.0/3.0)
+Print(true && false)
+Print(true || false)
+Print(!true)
